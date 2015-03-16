@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+
+	<head>
+		<script src='/socket.io/socket.io.js'></script>
+		<script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+
+
+		<script>
+		$(document).ready(function(){
+			var socket = io.connect();
+
+
+			socket.on('connected', function(data){
+				console.log(data.socket_id + ' connected');
+			});
+		});
+		</script>
+
+
+	</head>
+
+	<body>
+
+
+
+
+	</body>
+
+
+</html>
