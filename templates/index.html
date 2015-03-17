@@ -3,12 +3,32 @@
 	<head>
 		<script src='/socket.io/socket.io.js'></script>
 		<script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
-
+		<link rel="stylesheet" href="base.css">
 
 		<script>
 		$(document).ready(function(){
 			var socket = io.connect();
+			var pessoas = [];
 
+			var nome = prompt("Entre com seu nome : ", "");
+           	socket.emit('new pessoa', {'nome': nome});
+
+           	socket.on('update pessoas', function (_pessoas) {
+           		$('#pessoas').html('');
+           		for (var i = 0; i < _pessoas.length; i++) {
+           			pessoas.push(_pessoas[i]);
+           			$('#pessoas').append(_pessoas[i].nome + '<br>');
+           		}
+            });
+
+
+            $('.botao').click(function(){
+            	socket.emit('botao click',  {'pessoa': nome, 'botao': $(this).attr('id')});
+            });
+
+            socket.on('event botao click', function (data){
+            	alert(data.pessoa + ' clicou no botao '+ data.botao);
+            });
 
 			socket.on('connected', function(data){
 				console.log(data.socket_id + ' connected');
@@ -21,7 +41,11 @@
 
 	<body>
 
+	<div id="verde" class="botao"></div>
+	<div id="vermelho" class="botao"></div>
+	<div id="amarelo" class="botao"></div>
 
+	<div id="pessoas"></div>
 
 
 	</body>

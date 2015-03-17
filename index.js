@@ -30,9 +30,36 @@ server.listen(app.get('port'), function(){
 });
 
 var io = require("socket.io").listen(server);
+var PessoaModule = require('./core/pessoa.js');
+
+var pessoas = [];
 
 io.sockets.on('connection', function (socket) {
 
+  socket.pessoa = new PessoaModule();
+
   socket.emit('connected', {'socket_id': socket.id});
+
+  socket.on('new pessoa', function (data) {
+    socket.pessoa.nome = data.nome;
+    pessoas.push(socket.pessoa);
+    io.sockets.emit('update pessoas', pessoas);
+  });
+
+  socket.on('botao click', function (data) {
+    io.sockets.emit('event botao click', {'pessoa': data.pessoa, 'botao': data.botao})
+  });
+
+
+  socket.on('disconnect', function (data){
+    for (var i = 0; i < pessoas.length; i++) {
+      if (socket.pessoa.nome == pessoas[i].nome) {
+        pessoas.splice(i, 1);
+      }
+    }
+
+    io.sockets.emit('update pessoas', pessoas);
+
+  });
 
 });

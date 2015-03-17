@@ -1,0 +1,16 @@
+#verde {
+	background:green;
+}
+
+#amarelo {
+	background:yellow;
+}
+
+#vermelho {
+	background:red;
+}
+
+.botao {
+	width:100px;
+	height:50px;
+}
